@@ -1,0 +1,848 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+	<link href="http://cdn.bootcss.com/bootstrap/3.3.1/css/bootstrap-theme.min.css" rel="stylesheet">
+	
+	<link rel="stylesheet" href="css/video-js.min.css">
+	
+	<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+ 	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="http://cdn.bootcss.com/bootstrap/3.3.1/js/npm.js"></script>
+	<script src="js/video.min.js"></script>
+	
+	
+	
+	<script src="http://cdn.bootcss.com/bootstrap-hover-dropdown/2.0.10/bootstrap-hover-dropdown.min.js"></script>
+	
+	<style>
+		.logoH{
+			width: 150px;
+			height: 75px;
+		}
+		
+		.touxiang{
+			
+			width: 40px;
+			height: 40px;
+		
+		}
+		
+		.mask {
+		    position: absolute;
+		    top: 0;
+		    left: 0;
+		    width: 150px;
+		    height: 150px;
+		    background: rgba(101, 101, 101, 0.6);
+		    color: #ffffff;
+		    opacity: 0;
+		}
+		
+		.img_div a:hover .mask {
+		    opacity: 1;           
+		}
+
+
+		
+	</style>
+	
+	<script type="text/javascript">
+	
+	function username(){
+		//alert("aaaa");
+		
+		var ajax;
+		if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+			ajax=new XMLHttpRequest();
+		}else{// code for IE6, IE5
+		  ajax=new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		
+		ajax.open("POST","user/getUserSession");
+		ajax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
+		ajax.send(null);
+		
+		ajax.onreadystatechange=function(){
+			
+			if(ajax.readyState==4 && ajax.status==200){
+				var json = JSON.parse(ajax.responseText);
+				var username = json.username;
+				//alert(username);
+				var span = document.getElementById("usernameSpan");
+				span.innerHTML=username;
+			}else{
+				/*alert("失败")
+				alert(ajax.readyState+":"+ajax.status);*/
+			}
+			
+		}
+		
+		//alert("哈哈哈");
+	}
+	
+	function sousuo(){
+		  var mainDiv = document.getElementById("mainDiv");
+		  mainDiv.style.display="none";
+		  var sousuoDiv = document.getElementById("sousuoDiv");
+		  sousuoDiv.style.display="";
+			//var showTable = showTable;
+			var sousuo = document.getElementById("sousuo").value;
+			var ajax;
+			if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+				ajax=new XMLHttpRequest();
+			}else{// code for IE6, IE5
+			  ajax=new ActiveXObject("Microsoft.XMLHTTP");
+			}
+			ajax.open("GET","user/selectBySousuo?sousuo="+sousuo);
+			ajax.send();
+			ajax.onreadystatechange=function(){
+				//var showTable = showTable;
+				if(ajax.readyState==4 && ajax.status==200){
+					alert(ajax.responseText);
+					
+					/*
+					alert("iiii");
+					var str = ajax.responseText;
+					var eval = eval("("+str+")");
+					alert("jjjj");
+					for(var i in eval){
+						alert(eval[i].username+":"+eval[i].usersex);
+					}
+					*/
+					
+					
+					var jsons = JSON.parse(ajax.responseText);
+					var length = 0;
+					for(var j in jsons){
+						length++;
+					}
+					
+					//var showTable = document.getElementById("showTable");
+					alert(sousuoTbody.innerHTML);
+					
+					sousuoTbody.innerHTML="";
+					
+					if(length!=0){
+						for(var i=0;i<length;i++) {
+							alert(jsons[i].username+":"+jsons[i].usersex);
+							sousuoTbody.innerHTML=sousuoTbody.innerHTML+"<tr><th>"+jsons[i].username+"</th><th>"+jsons[i].usersex+"</th><th>"+jsons[i].userFollow+"</th><th>"+jsons[i].userFans+"</th><th><input type='button' style='color: #A71D2A;' name='"+jsons[i].userphone+"' value='"+jsons[i].ifFollow+"' onClick='follow(this.name,this.value)' /></th></tr>";
+						}
+					}else{
+						sousuoTbody.innerHTML=sousuoTbody.innerHTML+"<tr><th>没有此数据</th></tr>";
+					}
+					
+					
+				}else{
+					alert("失败");
+					alert(ajax.readyState+"+"+ajax.status);
+				}
+			}
+		}
+	
+	  function follow(userphone,ifFollow){
+		  alert("关注"+userphone+":"+ifFollow);
+			var followphone = userphone;
+			if(ifFollow=="已关注"){
+				var ajax;
+				if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+					ajax=new XMLHttpRequest();
+				}else{// code for IE6, IE5
+				  ajax=new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				ajax.open("GET","user/delFolByUpAndFp?followphone="+followphone);
+				ajax.send();
+				ajax.onreadystatechange=function(){
+					if(ajax.readyState==4 && ajax.status==200){
+						sousuo();
+					}else{
+						alert("失败-取消关注");
+					}
+				}
+			}else if(ifFollow=="关注"){
+				var ajax;
+				if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+					ajax=new XMLHttpRequest();
+				}else{// code for IE6, IE5
+				  ajax=new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				ajax.open("GET","user/addFolByUpAndFp?followphone="+followphone);
+				ajax.send();
+				ajax.onreadystatechange=function(){
+					if(ajax.readyState==4 && ajax.status==200){
+						sousuo();
+					}else{
+						alert("失败-关注");
+					}
+				}
+			}
+		}
+	  
+	  window.onload = function(){
+		  username();
+		  touxiang();
+		  username2();
+		  usersex();
+		  usertext();
+		  follows();
+		  fans();
+		  useremail();
+	  }
+	  
+	  
+	</script>
+</head>
+
+<body background="image/backgroud.jpg">
+	
+	<div class="container-fluid" style="width: 1480px" >
+	
+	<head>
+				<div class="row">
+					
+					<div class="col-lg-2 col-md-2"><span style="float: left;"><img class="logoH" src="image/logo.png" alt=""></span></div>
+
+					<div class="col-lg-4 col-md4">
+						<div style="margin: 20px;">
+							<button type="button" class="btn btn-default" onClick="javascript:location.href='index.html'">首页</button>
+							<button type="button" class="btn btn-default" onClick="javascript:location.href='roomList.html'">直播</button>
+							<div class="btn-group dropdown">
+								<button id="dropdownMenu1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">
+									分类
+									<span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu" role="menu">
+									<li><a href="#">绝地求生</a></li>
+									<li><a href="#">王者荣耀</a></li>
+									<li><a href="#">英雄联盟</a></li>
+									<li class="divider"></li>
+									<li><a href="#">颜值</a></li>
+									<li><a href="#">音乐</a></li>
+									<li><a href="#">吃播</a></li>
+								</ul>
+							</div>
+							<button type="button" class="btn btn-default">视频</button>
+							<button type="button" class="btn btn-default">鱼吧</button>
+						</div>
+					</div>
+
+					<div class="col-lg-3 col-md-3">
+
+							<div class="input-group" style="margin: 20px;">
+								<input type="text" class="form-control" id="sousuo">
+								<span class="input-group-btn">
+									<button class="btn btn-default" type="button" onClick="sousuo()">
+										<span class="glyphicon glyphicon-search"></span>
+									</button>
+								</span>
+							</div>
+
+					</div>
+
+					<div class="col-lg-3 col-md-3">
+						<div style="margin: 10px;">
+							<span style="float: right">
+								<button type="button" class="btn btn-default" style="font-size: 10px;">
+									<span class="glyphicon glyphicon-eye-open" style="font-size: 15px"></span>
+									<br>
+									历史
+								</button>
+								<button type="button" class="btn btn-default"  style="font-size: 10px;">
+									<span class="glyphicon glyphicon-heart" style="font-size: 15px"></span>
+									<br>
+									关注
+								</button>
+								<button type="button" class="btn btn-default"  style="font-size: 10px;">
+									<span class="glyphicon glyphicon-facetime-video" style="font-size: 15px"></span>
+									<br>
+									开播
+								</button>
+								<button type="button" class="btn btn-default"  style="font-size: 10px;">
+									<span class="glyphicon glyphicon-envelope" style="font-size: 15px"></span>
+									<br>
+									消息
+								</button>
+								<a href="" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" onClick=""><img class="img-circle touxiang" id="touxiang" src="image/touxiang.png" alt=""/></a>
+								<ul class="dropdown-menu" contenteditable="true" role="menu" style="width: 100%">
+									昵称：<span id="usernameSpan"></span><br>
+									<input type="button" value="查看个人信息" onclick="javascript:location.href='userInfo.html'"><br>
+									<input type="button" value="退出登录" onclick="javascript:location.href='login.html'"><br>
+								</ul>
+							</span>
+						</div>
+					</div>
+				</div>
+			</head>
+	
+	<div class="panel panel-primary" id="mainDiv">
+		<div class="panel-heading">个人信息</div>
+		
+		
+		<div class="panel-body">
+			<div class="container-fluid" >
+				
+				<!-- 要将父布局的position设置为relative，父布局将无法包裹input -->
+			    <div class="control-group" style="position: relative;">
+			   		<form id="fileForm" name="fileForm" action="#" οnsubmit="return false" method="post" enctype="multipart/form-data">
+			    
+			    
+				    	<div class="img_div" style="position: relative;text-align: top;float: left;width: 150px;height: 150px;">
+					        <!--设置input的position为absolute，使其不按文档流排版，并设置其包裹整个布局 -->
+				        <!-- 设置opactity为0，使input变透明 -->
+				        <!-- 只接受jpg，gif和png格式 -->
+						<img id="upload" src="" style="width: 150px; height: 150px; vertical-align: middle;" />
+				        <!-- 自定义按钮效果 -->  
+			            <a>
+			            	<div class="mask">
+			            		<input id="upload-input" name="file" style="position: absolute; top: 0; bottom: 0; left: 0;right: 0; opacity: 0;width: 150px;" type="file" accept="image/gif, image/jpg, image/png" onchange="showImg(this)"/>
+			               		<h3 style="text-align: center;">修改头像</h3>
+			                </div>
+			        	</a>
+			            
+				  
+				    	</div>
+			   		</form>		
+			   		
+				    <script type="text/javascript">
+				    
+				    function touxiang(){
+				    	 var ajax;
+		    			if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+		    				ajax=new XMLHttpRequest();
+		    			}else{// code for IE6, IE5
+		    			  ajax=new ActiveXObject("Microsoft.XMLHTTP");
+		    			}
+		    			
+		    			ajax.open("get","user/showTouxiang");
+		    			ajax.responseType = "blob"; // 表示接收文件流数据
+		    			ajax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
+		    			ajax.send(null);
+		    			
+		    			ajax.onreadystatechange=function(){
+		    				if(ajax.readyState==4 && ajax.status==200){
+		    					
+		    					var blob = this.response;
+		    			        //将Blob 对象转换成 base64 字符串
+		    			        var reader = new FileReader();
+		    			        reader.readAsDataURL(blob);
+		    			        reader.onload = function(e) {
+						             document.getElementById('upload').src=e.target.result;
+						             document.getElementById('touxiang').src=e.target.result;
+						         }
+		    					//var b = ajax.responseBody;
+		    					//document.getElementById('upload').src=ajax.responseBody;
+		    					//var json = JSON.parse(ajax.responseText);
+		    					//var username = ajax.responseText;
+		    					//$("#username").html(username);
+		    				}else{
+		    					//alert("失败");
+		    					//alert(ajax.readyState+":"+ajax.status);
+		    				}
+		    			}
+				    	//document.getElementById("upload").src="image/touxiang.png";
+				    	//document.getElementById("upload").src="127.0.0.1://C://Users//13662//Desktop//img//13662920679.png";
+			    	}
+				    
+					    function showImg(input) {
+					    	
+					    	 var file = input.files[0];
+					         var reader = new FileReader();
+					         
+					         // 图片读取成功回调函数
+					         reader.onload = function(e) {
+					             document.getElementById('upload').src=e.target.result;
+					             document.getElementById('touxiang').src=e.target.result;
+					         }
+					         reader.readAsDataURL(file);
+					        
+
+					        var params = new FormData();
+					       	params.append('file',file);
+					       	
+					       	alert(params.get("file").name+"aaa");
+					        
+					       	
+					      //进行Ajax请求
+				             $.ajax({
+				                 //几个参数需要注意一下
+				                 type: "POST",//方法类型
+				                 dataType: "json",//预期服务器返回的数据类型,可以不设置
+				                 url: "user/uptouxaing" ,//url
+				                 data: params,
+				                 async: false,  
+				                 cache: false,
+				                 contentType: false, //禁止设置请求类型
+				                 processData: false, //禁止jquery对DAta数据的处理,默认会处理
+				                 success: function (data) {
+				                     //console.log(result);//打印服务端返回的数据(调试用)
+				                     //if (result.isSuccess) {
+				                    	 alert("成功");
+				                    	 alert(data);
+				                         //跳转页面
+				                         //window.location.href="user/personalDesk.action";
+				                     //}
+				                 },
+				                 error:function (XMLHttpRequest, textStatus, errorThrown) {
+			                         console.log('出错啦！')
+			                         console.log(XMLHttpRequest);
+			                         console.log(textStatus);
+			                         console.log(errorThrown);
+			                     }
+				             });
+					       	
+							
+				           
+					    }
+					</script>
+					
+			    	<div style="height: 150px;margin-left: 200px;">
+			    		<div style="height: 40px">
+			    			<span id="username" style="font-size: 20px;"></span>
+				    		<button data-toggle="modal" data-target="#myModal" type="button" style="border: none;background-color: white;">
+				    			<span class="glyphicon glyphicon-edit" ></span>
+				    		</button>
+								<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-header">
+												<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+													&times;
+												</button>
+												<h4 class="modal-title" id="myModalLabel">
+													修改昵称
+												</h4>
+											</div>
+											<div class="modal-body">
+												<input type="text" id="newUsername" value="">
+												<span id="newUsernameSpan"></span>
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+												</button>
+												<button type="button" class="btn btn-primary" onclick="newUsername()">
+													提交更改
+												</button>
+											</div>
+										</div><!-- /.modal-content -->
+									</div><!-- /.modal -->
+								</div>
+			    		</div>
+			    		<div style="height: 40px;">
+			    			<img alt="" id="usersex" src="" style="width: 30px;height: 30px">
+			    			<script type="text/javascript">
+			    				function usersex(){
+			    					$.ajax({
+			    						type:"post",
+			    						url:"user/getUserSession",
+			    						dataType:"json",
+			    						success:function(data){							    							
+			    							//var json = JSON.stringify(data);						    							
+			    							if(data.usersex==0){
+			    								$("#usersex").attr('src','image/girl.png');
+			    							}else if(data.usersex==1){						    								
+			    								$("#usersex").attr('src','image/boy.png');
+			    							}
+			    						},
+			    						error:function(){
+			    							alert("失败")
+			    						}							
+			    					})
+			    				}
+			    			</script>
+			    		</div>
+			    		<div style="height: 30px;">
+			    			<span>关注:</span><span id="follows"></span><span>&nbsp;&nbsp;&nbsp;&nbsp;粉丝:</span><span id="fans"></span>
+			    			<script type="text/javascript">
+			    				function follows(){
+			    					$.ajax({
+			    						url:"user/follows",
+			    						type:"post",
+			    						dataType:"json",
+			    						success:function(data){
+			    							$("#follows").html(data.follows);
+			    						}
+			    					})
+			    				}
+			    				function fans(){
+			    					$.ajax({
+			    						url:"user/fans",
+			    						type:"post",
+			    						dataType:"json",
+			    						success:function(data){
+			    							$("#fans").html(data.fans);
+			    						}
+			    					})
+			    				}
+			    			</script>
+			    		</div>
+			    		<div style="height: 40px;">
+			    			<span>个性签名：</span>
+			    			<button data-toggle="modal" data-target="#myModal2" type="button" style="border: none;background-color: white;">
+				    			<span class="glyphicon glyphicon-edit" ></span>
+				    		</button>
+			    			<br>
+			    			<span id="usertext"></span>
+			    			
+				    			<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-header">
+												<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+													&times;
+												</button>
+												<h4 class="modal-title" id="myModalLabel">
+													修改个性签名
+												</h4>
+											</div>
+											<div class="modal-body">
+												<input type="text" id="newUsertext" value="">
+												<span id="newUsertextSpan"></span>
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+												</button>
+												<button type="button" class="btn btn-primary" onclick="newUsertext()">
+													提交更改
+												</button>
+											</div>
+										</div><!-- /.modal-content -->
+									</div><!-- /.modal -->
+								</div>
+			    		</div>
+			    	</div>
+			    	<script type="text/javascript">
+			    		function username2(){
+			    			var ajax;
+			    			if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+			    				ajax=new XMLHttpRequest();
+			    			}else{// code for IE6, IE5
+			    			  ajax=new ActiveXObject("Microsoft.XMLHTTP");
+			    			}
+			    			
+			    			ajax.open("POST","user/getUserSession2");
+			    			ajax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
+			    			ajax.send(null);
+			    			
+			    			ajax.onreadystatechange=function(){
+			    				if(ajax.readyState==4 && ajax.status==200){
+			    					//var json = JSON.parse(ajax.responseText);
+			    					var username = ajax.responseText;
+			    					$("#username").html(username);
+			    				}else{
+			    					//alert(ajax.readyState+":"+ajax.status);
+			    				}
+			    			}
+			    		}
+			    		
+			    		function usertext(){
+			    			$.ajax({
+			    				type:"post",
+			    				url:"user/getUsertext",
+			    				dataType:"json",
+			    				success:function(data){			    				
+			    					$("#usertext").html(data.usertext);
+			    				}
+			    			
+			    			})
+			    		}
+			    		
+			    		function newUsername(){
+			    			//var newUsername = document.getElementById("newUsername").value;
+			    			//alert("45645615");
+			    			 
+			    			var newUsername = $("#newUsername").val();
+			    			alert(newUsername);
+			    			var span = document.getElementById("newUsernameSpan");
+			    			if(newUsername=="" || newUsername==null){
+			    				span.innerHTML="昵称不能为空";
+			    				span.style.color="red";
+			    				//b = false;
+			    				return false;
+			    			}else{
+			    				var ajax;
+			    				if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+			    				  ajax=new XMLHttpRequest();
+			    				}else{// code for IE6, IE5
+			    				  ajax=new ActiveXObject("Microsoft.XMLHTTP");
+			    				} 
+			    				ajax.open("GET","user/updateUsername?newUsername="+newUsername);
+			    				ajax.send();
+			    				ajax.onreadystatechange=function(){
+			    					if(ajax.readyState==4 && ajax.status==200){
+			    						var json = JSON.parse(ajax.responseText);
+			    						if(json.result==true){
+			    							alert("通过"+":");
+			    							$("#username").html(json.newUsername);
+			    							span.innerHTML="*修改成功";
+			    							span.style.color="green";
+			    							username();
+			    							return true;
+			    						}else if(json.result==false){
+			    							span.innerHTML="昵称已存在";
+			    							span.style.color="red";
+			    							return false;
+			    						}
+			    					}
+			    					//else{ alert(ajax.readyState+":"+ajax.status); }
+			    				}
+			    			}							    	
+			    		}
+			    		
+			    		function newUsertext(){
+		    				
+		    				var newUsertext = $("#newUsertext").val();
+		    				alert(newUsertext);
+		    				$.ajax({
+		    					type:"post",
+		    					url:"user/updateUsertext",
+		    					data:{"newUsertext":newUsertext},
+		    					success:function(data){
+		    						//var json = JSON.stringify(data);	
+		    						alert(data.newUsertext);
+		    						$("#usertext").html(data.newUsertext);
+		    						$("#newUsertextSpan").attr('style','color:green');
+		    						$("#newUsertextSpan").html("修改成功");
+		    						
+		    					}
+		    				})
+		    			}
+			    	</script>
+			    				    	
+			    	<hr>
+			    	
+			    	<div>
+			    		<span>绑定邮箱:</span>
+			    		<span id="useremail"></span>
+			    		<button data-toggle="modal" data-target="#myModal3" type="button" style="border: none;background-color: white;">
+			    			<span class="glyphicon glyphicon-edit" ></span>
+			    		</button>
+			    			<div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+												&times;
+											</button>
+											<h4 class="modal-title" id="myModalLabel">
+												修改绑定邮箱
+											</h4>
+										</div>
+										<div class="modal-body">
+											<input type="text" id="newUseremail" value="">
+											<span id="newUseremailSpan"></span>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+											</button>
+											<button type="button" class="btn btn-primary" onclick="newUseremail()">
+												提交更改
+											</button>
+										</div>
+									</div><!-- /.modal-content -->
+								</div><!-- /.modal -->
+							</div>
+						<script type="text/javascript">
+							function useremail(){								
+								$.ajax({
+		    						type:"post",
+		    						url:"user/getUserSession",
+		    						dataType:"json",
+		    						success:function(data){		
+		    							$("#useremail").html(data.useremail);		    							
+		    						},
+		    						error:function(){
+		    							alert("失败")
+		    						}							
+		    					})					
+							}
+							function newUseremail(){
+								var reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+$/;
+								var newUseremail = $("#newUseremail").val();
+								alert(newUseremail);
+								if(newUseremail==""||newUseremail==null){
+									$("#newUseremailSpan").attr('style','color:red');
+		    						$("#newUseremailSpan").html("不能为空");
+								}else if(reg.test(newUseremail)){
+									$.ajax({
+				    					type:"post",
+				    					url:"user/updateUseremail",
+				    					data:{"newUseremail":newUseremail},
+				    					success:function(data){
+				    						//var json = JSON.stringify(data);	
+				    						$("#useremail").html(data.newUseremail);
+				    						$("#newUseremailSpan").attr('style','color:green');
+				    						$("#newUseremailSpan").html("提交成功");
+				    						
+				    					}
+				    				})
+								}else{
+									$("#newUseremailSpan").attr('style','color:red');
+		    						$("#newUseremailSpan").html("格式不符");
+								}
+								
+			    				/*
+			    				$.ajax({
+			    					type:"post",
+			    					url:"user/updateUseremail",
+			    					data:{"newUseremail":newUseremail},
+			    					success:function(data){
+			    						//var json = JSON.stringify(data);	
+			    						
+			    						$("#newUseremailSpan").attr('style','color:green');
+			    						$("#newUseremailSpan").html("符合");
+			    						
+			    					}
+			    				})
+			    				*/
+							}
+						</script>
+			    		
+			    		<br>
+			    		
+			    		<div style="margin-top: 30px;">
+			    			<button data-toggle="modal" data-target="#myModal4" type="button" style="border: none;">
+			    				密码修改<span class="glyphicon glyphicon-edit" ></span>
+			    			</button>
+			    				<div class="modal fade" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+												&times;
+											</button>
+											<h4 class="modal-title" id="myModalLabel">
+												修改密码(6-8位)
+											</h4>
+										</div>
+										<div class="modal-body">
+											<span>原密码:</span>
+											<input type="password" id="oldUserpwd" value="">
+											<span id="oldUserpwdSpan"></span><br>
+											<span>新密码:</span>
+											<input type="password" id="newUserpwd" value="">
+											<span id="newUserpwdSpan"></span><br>
+											<span>确认新密码:</span>
+											<input type="password" id="sureUserpwd" value="">
+											<span id="sureUserpwdSpan"></span>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+											</button>
+											<button type="button" class="btn btn-primary" onclick="newUserpwd()">
+												提交更改,成功将要重新登录
+											</button>
+										</div>
+									</div><!-- /.modal-content -->
+								</div><!-- /.modal -->
+								</div>
+			    		</div>
+			    		<script type="text/javascript">
+			    		/*
+			    			function updateUserpwd(){
+			    				var newUserpwd = $("#newUserpwd").val();
+			    				alert("修改密码");
+			    				$.ajax({
+			    					type:"post",
+			    					url:"user/updateUserpwd",
+			    					data:{"newUserpwd":newUserpwd},
+			    					dataType:"json",
+			    					success:function(data){		    						
+			    						alert("修改成功");	    						
+			    					}
+			    				})
+			    			}
+			    		*/
+			    		
+			    			function newUserpwd(){
+			    				alert("修改密码");		    				
+			    				var pwd;		    						    				
+			    				var oldUserpwd = $("#oldUserpwd").val();		    							    				
+			    				var newUserpwd = $("#newUserpwd").val();
+			    				var sureUserpwd = $("#sureUserpwd").val();
+			    				var regPwd = /^\w{6,8}$/;			    							    				
+			    				$.ajax({
+			    					type:"post",
+			    					url:"user/getUserSession",
+			    					dataType:"json",
+			    					success:function(data){				    						
+			    						pwd = data.userpwd;		    						
+			    						if(pwd==oldUserpwd){
+					    					
+					    					$("#oldUserpwdSpan").html("一致");
+					    					
+					    					if(newUserpwd==""||newUserpwd==null||sureUserpwd==""||sureUserpwd==null){
+					    						$("#newUserpwdSpan").html("密码不能为空");
+					    					}else if(!regPwd.test(newUserpwd)){
+					    						$("#newUserpwdSpan").html("密码不符合要求");
+					    					}else if(newUserpwd==sureUserpwd){
+					    						$("#newUserpwdSpan").html("密码符合要求");
+					    						$("#sureUserpwdSpan").html("密码一致");
+					    						//updateUserpwd(newUserpwd);
+					    						
+					    						$.ajax({
+							    					type:"post",
+							    					url:"user/updateUserpwd",
+							    					data:{"newUserpwd":newUserpwd},
+							    					dataType:"json",
+							    					success:function(data){	
+							    						
+							    						alert("修改成功!请重新登录");	
+							    						
+							    					}
+							    				})
+							    				window.location.replace("/LiveBP/login.html");
+					    					}else{
+					    						$("#newUserpwdSpan").html("密码符合要求");
+					    						$("#sureUserpwdSpan").html("密码不一致");
+					    					}
+					    					
+					    					
+					    					
+					    					
+					    				}else{
+					    					$("#oldUserpwdSpan").html("不一致");
+					    				}
+			    						
+			    					},
+			    					error:function(){
+		    							alert("失败")
+		    						}	
+			    					
+			    				})	
+			    			}
+			    		
+			    		</script>
+			    	</div>
+			    </div>
+							    
+				
+							
+			</div>
+		</div>
+	</div>
+		
+	<div id="sousuoDiv" style="display: none;">
+				<table id="sousuoTable"  style="color: #FFFFFF;align-content: center;">
+					<thead>
+						<tr>
+							<th width="150px;">昵称</th>
+							<th width="150px;">性别</th>
+							<th width="150px;">关注</th>
+							<th width="150px;">粉丝</th>
+							<th width="150px;">操作</th>
+						</tr>
+					</thead>
+					<tbody id="sousuoTbody">
+						
+					</tbody>
+				</table>
+			</div>
+			<script type="text/javascript">
+				var sousuoTbody = document.getElementById("sousuoTbody");
+			</script>
+		
+	</div>
+</body>
+</html>

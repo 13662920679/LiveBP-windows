@@ -1,0 +1,71 @@
+@charset "UTF-8";
+/* CSS Document */
+body {
+	margin-left: auto;
+	margin-right: auto;
+	width: 600px;
+	margin-top: 150px;
+	border: 1px solid #666;
+	border-color:rgba(255,255,255,0.6);
+	box-shadow:rgba(255,255,255,0.6);
+}
+img {
+	max-width: 12em;
+	height:100px;
+}
+form p.title {
+	font-family: "Palatino Linotype", Baskerville, serif;
+	font-size: 20px;
+	color:rgba(255,255,255,0.6);
+	line-height: 150%;
+	margin-left: 10px;
+	font-weight:bold;
+}
+form p.login {
+	font-family: "Palatino Linotype", Baskerville, serif;
+	font-size: 16px;
+	font-style: normal;
+	font-weight:600;
+	color:rgba(255,255,255,0.6);
+	line-height: 150%;
+	text-align: center;
+}
+form input[type="text"] {
+	width: 200px;
+	height: 22px;
+	border-radius: 5px;
+	font-size: 16px;
+	font-family: "Palatino Linotype", Baskerville, serif;
+}
+form input[type="password"] {
+	width: 200px;
+	height: 22px;
+	border-radius: 5px;
+	font-size: 16px;
+	font-family: "Palatino Linotype", Baskerville, serif;
+}
+form p.loginButtons input {
+	position: relative;
+	line-height: 150%;
+	width: 58px;
+	height: 30px;
+	font-size: 16px;
+	margin-right: 20px;
+	left: 400px;
+	border-radius: 5px;
+	background-color:rgba(255,255,255,0);
+	color:rgba(255,255,255,0.6);
+}
+form p.loginButtons input:hover {
+	background: rgba(255,255,255,1);
+}
+div#s1 {
+	height: 1px;
+	width: 100%;
+	background: rgba(255,255,255,0.6);
+	overflow: hidden;
+}
+
+#deng{
+	background:url(../image/b2.jpg);
+}

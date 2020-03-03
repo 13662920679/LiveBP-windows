@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<div id="mainDiv" style="display: ;">
+		<div class="center-block">
+			<!-- 滚动条 -->
+			<div class="row">
+				<marquee id="affiche" align="left" behavior="alternate"  direction="right" height="100%" width="100%" hspace="50" vspace="20" loop="-1" scrollamount="10" scrolldelay="100" onMouseOut="this.start()" onMouseOver="this.stop()">
+					<h1><font color="#E71418">斗鱼热门直播，尽在下方</font></h1>
+				</marquee>
+			</div>
+			
+			<!-- 图片导航 -->
+			<div class="tabbable" style="width: 80%;margin: 0 auto">
+			
+				<ul class="nav nav-tabs" style="display: table;text-align: center;margin:0 auto;">
+					<li class="active" style="width: 20%">
+						<a href="#panel-1" data-toggle="tab"><img src="image/xiao1.jpg" alt="" style="width: 100%;height: 100px"></a>
+					</li>
+					<li style="width: 20%">
+						<a href="#panel-2" data-toggle="tab"><img src="image/xiao2.jpg" alt="" style="width: 100%;height: 100px"></a>
+					</li>
+					<li style="width: 20%">
+						<a href="#panel-3" data-toggle="tab"><img src="image/xiao3.jpg" alt="" style="width: 100%;height: 100px"></a>
+					</li>
+					<li style="width: 20%">
+						<a href="#panel-4" data-toggle="tab"><img src="image/xiao4.jpg" alt="" style="width: 100%;height: 100px"></a>
+					</li>
+					<li style="width: 20%">
+						<a href="#panel-5" data-toggle="tab"><img src="image/xiao5.jpg" alt="" style="width: 100%;height: 100px"></a>
+					</li>
+				</ul>
+			
+				
+				<div class="tab-content" style="height: auto">
+					<div class="tab-pane active" id="panel-1">
+						<img src="image/da1.jpg" alt="" style="width: 100%;height: 75%" onClick="javascript:location.href='viewRoom.html'">
+					</div>
+					<div class="tab-pane" id="panel-2">
+						<img src="image/da2.jpg" alt="" style="width: 100%;height: 75%" onClick="javascript:location.href='viewRoom.html'">
+					</div>
+					<div class="tab-pane" id="panel-3">
+						<img src="image/da3.jpg" alt="" style="width: 100%;height: 75%" onClick="javascript:location.href='viewRoom.html'">
+					</div>
+					<div class="tab-pane" id="panel-4">
+						<img src="image/da4.jpg" alt="" style="width: 100%;height: 75%" onClick="javascript:location.href='viewRoom.html'">
+					</div>
+					<div class="tab-pane" id="panel-5">
+						<img src="image/da5.jpg" alt="" style="width: 100%;height: 75%" onClick="javascript:location.href='viewRoom.html'">
+					</div>
+				</div>
+				
+			</div>
+
+		</div>
+		
+		<!-- 底部大杂烩 -->
+		<div class="row" style="height: 100%">
+			<div class="col-lg-6" style="height: 100%;">
+				<div class="panel panel-primary">
+					<div class="panel-heading">推荐活动</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-lg-7">
+								<div id="myCarousel2" class="carousel slide" data-ride="carousel" style="margin: 10px;">
+								   <!-- 轮播（Carousel）指标 -->
+								   <ol class="carousel-indicators">
+									  <li data-target="#myCarousel2" data-slide-to="0" class="active"></li>
+									  <li data-target="#myCarousel2" data-slide-to="1"></li>
+									  <li data-target="#myCarousel2" data-slide-to="2"></li>
+								   </ol>   
+								   <!-- 轮播（Carousel）项目 -->
+								   <div class="carousel-inner">
+									  <div class="item active">
+										 <img class="carousel-inner" src="image/1.jpg" alt="First slide">
+										 
+									  </div>
+									  <div class="item">
+										 <img class="carousel-inner" src="image/2.jpg" alt="Second slide">
+									  </div>
+									  <div class="item">
+										 <img class="carousel-inner" src="image/3.jpg" alt="Third slide">
+									  </div>
+								   </div>
+								   <!-- 轮播（Carousel）导航 -->
+								   <a class="carousel-control left" href="#myCarousel2" 
+									  data-slide="prev" role="button">
+										<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+									</a>
+								   <a class="carousel-control right" href="#myCarousel2" 
+									  data-slide="next" role="button">
+									   <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+									</a>
+								</div>
+							</div>
+							<div class="col-lg-5">
+								<div  style="margin: 10px;"><a href=""><img class="img-rounded" src="image/shang.jpg" alt="" style="width: 200px;height: 100px;"></a></div>
+								<div  style="margin: 10px;"><a href=""><img class="img-rounded" src="image/xia.jpg" alt="" style="width: 200px;height: 100px;"></a></div>
+							</div>
+						</div>	
+					</div>
+				</div>
+			</div>
+			
+			<div class="col-lg-3" style="height: 100%">
+				<div class="panel panel-primary">
+					<div class="panel-heading">新闻</div>
+					<div class="panel-body">
+						<a href="">
+							<img src="image/hot.jpg" alt="" style="width: 20px;height: 20px;"><strong>2019斗鱼嘉年华 售票火热开抢</strong>
+							<br>
+							<font size="-3" color="#B5A7A7">嘉年华门票3折优惠到底！超低折扣仅限一周</font>
+						</a>
+						<br>
+						<a href="">
+							<img src="image/hot.jpg" alt="" style="width: 20px;height: 20px;"><strong>2019斗鱼嘉年华 售票火热开抢</strong>
+							<br>
+							<font size="-3" color="#B5A7A7">嘉年华门票3折优惠到底！超低折扣仅限一周</font>
+						</a>
+						<br>
+						<a href="">
+							<img src="image/hot.jpg" alt="" style="width: 20px;height: 20px;"><strong>2019斗鱼嘉年华 售票火热开抢</strong>
+							<br>
+							<font size="-3" color="#B5A7A7">嘉年华门票3折优惠到底！超低折扣仅限一周</font>
+						</a>
+						<br>
+						<br>
+						<a href="">
+							【新闻】 大茄子都来斗鱼了，Sakula还会远吗？
+						</a>
+						<a href="">
+							【新闻】 大茄子都来斗鱼了，Sakula还会远吗？
+						</a>
+						<a href="">
+							【新闻】 大茄子都来斗鱼了，Sakula还会远吗？
+						</a>
+						<a href="">
+							【新闻】 大茄子都来斗鱼了，Sakula还会远吗？
+						</a>
+					</div>
+				</div>
+			</div>
+			
+			<div class="col-lg-3" style="height: 100%">
+				<div class="panel panel-primary">
+					<div class="panel-heading">热门视频</div>
+					<div class="panel-body">
+						<video src="video/game.mp4" autoplay="autoplay" controls="controls" style="width: 300px;height: 200px"></video>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

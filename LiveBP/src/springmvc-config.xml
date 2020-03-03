@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+		http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd">
+
+		<!-- 扫描指定包下有储存类型的类,将这些类创建对象并加到Spring容器里面 -->
+		<context:component-scan base-package="com.huang.LiveBP"></context:component-scan>
+		
+		<!-- 启用Spring注解功能 -->
+		<mvc:annotation-driven/>
+		
+		<mvc:resources location="/" mapping="*"></mvc:resources>
+		
+		<bean id="multipartResolver"
+			class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+			<!-- 设定默认编码 -->
+			<property name="defaultEncoding" value="UTF-8"></property>
+			<!-- 设定文件上传的最大值5MB，5*1024*1024 -->
+			<property name="maxUploadSize" value="5242880"></property>
+		</bean>
+
+		
+</beans>

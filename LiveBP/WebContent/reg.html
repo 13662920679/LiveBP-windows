@@ -1,0 +1,406 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Huang注册表单</title>
+	<link href="http://cdn.bootcss.com/bootstrap/3.3.1/css/bootstrap-theme.min.css" rel="stylesheet">
+	
+	<link rel="stylesheet" href="css/video-js.min.css">
+	
+	<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	
+	
+	
+	<script src="http://cdn.bootcss.com/bootstrap-hover-dropdown/2.0.10/bootstrap-hover-dropdown.min.js"></script>
+	
+	<style type="text/css">
+		/*设置背景图片*/
+		body{
+			background-image: url(image/b2.jpg);
+		}
+		/*设置tr样式*/
+		tr{
+			height: 40px;
+		}
+		/*设置div样式*/
+		#showdiv{
+			border: solid 1px #FF0000;/*边框*/
+			border-radius: 10px;/*边框圆角*/
+			width: 500px;
+			margin: auto;/*外边框*/
+			margin-top: 40px;
+		}
+		/*设置table样式*/
+		table{
+			margin: auto;
+			/*color: white;*/
+		}
+		span{
+			font-size: 13px;
+		}
+		#codeSpan{
+			font-size: 20px;
+		}
+	</style>
+	<!--<script src="js/jquery-3.3.1.js"></script>-->
+	<!--  <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script> -->
+	
+	
+	
+	<script type="text/javascript">
+	
+		var a;
+		var b;
+		var c;
+		var e;
+		var f;
+		var g;
+	
+		//创建验证码
+		function createCode(){
+			//创建随机的四位数字
+			var code = Math.floor(Math.random()*9000+1000);
+			//获取元素对象
+			var span = document.getElementById("codeSpan");
+			//将数字存放到span中
+			span.innerHTML=code;
+		}
+		//验证手机号
+		function checkPhone(){
+			var regular = /^1[3,4,5,7,8]\d{9}$/;
+			var phone = document.getElementById("phone").value;
+			var span = document.getElementById("phoneSpan");
+			if(phone=="" || phone==null){
+				span.innerHTML="不能为空";
+				span.style.color="red";
+				return false;
+			}else{
+				if(regular.test(phone)){
+					var ajax;
+					if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+						ajax=new XMLHttpRequest();
+					}else{// code for IE6, IE5
+					  ajax=new ActiveXObject("Microsoft.XMLHTTP");
+					}
+					ajax.open("get","user/regUserphoneIfSame?userphone="+phone);
+					ajax.send();
+					ajax.onreadystatechange=function(){
+						if(ajax.readyState==4 && ajax.status==200){
+							var json = JSON.parse(ajax.responseText);
+							if(json.result==true){
+								span.innerHTML="*通过";
+								span.style.color="green";
+								a = true;
+								return true;
+							}else if(json.result==false){
+								span.innerHTML="手机号已注册";
+								span.style.color="red";
+								a = false;
+								return false;
+							}
+						}
+						/*else{
+							alert(ajax.readyState+":"+ajax.status);
+						}*/
+					}
+			   	}else{
+					span.innerHTML="手机号不符合";
+					span.style.color="red";
+					return false;
+				}
+			}
+		}
+		
+		//验证昵称
+		function checkName(){
+			var name = document.getElementById("name").value;
+			
+			var span = document.getElementById("nameSpan");
+			if(name=="" || name==null){
+				span.innerHTML="昵称不能为空";
+				span.style.color="red";
+				b = false;
+				return false;
+			}else{
+				/*
+				$.ajax{
+					type:"GET",
+					URL:"user/regUsernameIfSame",
+					data:{username:name},
+					dataType:"json",
+					success:function(data){
+						if(json.result==true){
+							span.innerHTML="*通过";
+							span.style.color="green";
+							b = true;
+							return true;
+						}else if(json.result==false){
+							span.innerHTML="昵称已存在";
+							span.style.color="red";
+							b = false;
+							return false;
+						}
+					}
+					error:function(){
+						alert("失败");
+					}
+				}
+				*/
+				
+				
+				var ajax;
+				if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+				  ajax=new XMLHttpRequest();
+				}else{// code for IE6, IE5
+				  ajax=new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				ajax.open("GET","user/regUsernameIfSame?username="+name);
+				ajax.send();
+				ajax.onreadystatechange=function(){
+					if(ajax.readyState==4 && ajax.status==200){
+						var json = JSON.parse(ajax.responseText);
+						if(json.result==true){
+							span.innerHTML="*通过";
+							span.style.color="green";
+							b = true;
+							return true;
+						}else if(json.result==false){
+							span.innerHTML="昵称已存在";
+							span.style.color="red";
+							b = false;
+							return false;
+						}
+					}
+					//else{ alert(ajax.readyState+":"+ajax.status); }
+				}
+				
+				
+			}
+		}
+		
+		
+
+		
+		//验证密码
+		function checkPwd(){
+			//获取密码信息
+			var pwd = document.getElementById("pwd").value;
+			//创建校验规则(6-8位，开头为小写字母)
+			var reg = /^\w{6,8}$/;
+			//获取span对象
+			var span = document.getElementById("pwdSpan");
+			//开始校验
+			if(pwd=="" || pwd==null){
+			   	//输出校验结果
+				span.innerHTML="密码不能为空";
+				span.style.color="red";
+				c = false;
+				return false;
+		   	}else if(reg.test(pwd)){
+			 	span.innerHTML="密码OK";
+				span.style.color="green";
+				c = true;
+				return true;
+		 	}else{
+				span.innerHTML="密码不符合规则(6-8位)";
+				span.style.color="red";
+				c = false;
+				return false;
+			}
+			
+		}
+		
+		//校验确认密码
+		function checkPwd2(){
+			var pwd = document.getElementById("pwd");
+			var pwd2 = document.getElementById("pwd2");
+			var va = pwd.value;
+			var va2 = pwd2.value;
+			var span = document.getElementById("pwd2Span");
+			if(va2=="" || va2==null){
+			   	//输出校验结果
+				span.innerHTML="确认密码不能为空";
+				span.style.color="red";
+				d = false;
+				return false;
+		   	}else if(va==va2){
+			 	span.innerHTML="确认密码OK";
+				span.style.color="green";
+				d = true;
+				return true;
+		 	}else{
+				span.innerHTML="两次密码不一致";
+				span.style.color="red";
+				d = false;
+				return false;
+			}
+		}
+				
+		//校验邮箱
+		function checkMail(){
+			e = checkField("mail",/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+$/);
+			return checkField("mail",/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+$/);
+		}
+		
+		
+		
+		//校验验证码
+		function checkCode(){
+			var code = document.getElementById("code");
+			var va1 = code.value;
+			var va2 = document.getElementById("codeSpan").innerHTML;
+			
+			var span = document.getElementById("codeSpan2");
+			
+			if(va1==va2){
+			   	span.innerHTML="验证码正确";
+				span.style.color="green";
+				f = true;
+				return true;
+		   	}else{
+				span.innerHTML="验证码错误";
+				span.style.color="red";
+				f = false;
+				return false;
+			}
+		}
+		
+		//校验是否同意公司协议
+		function checkAgree(){
+			document.getElementById("sub").disabled = !document.getElementById("agree").checked;
+		}
+		
+		//提交判断
+		function checkSub(){
+			
+			checkPhone();
+			checkName();
+			checkPwd();		
+			checkPwd2();		
+			checkMail();
+		 	checkCode();
+		 	
+		 	
+		 	
+		 	if(a&&b&&c&&d&&e&&f){
+	            return true;    //return true; 时,表单将提交
+	        }
+	        else {
+	            return false;   //return false; 时,表单不提交
+	        }
+	
+			//return checkPhone()&&checkName()&&checkPwd()&&checkPwd2()&&checkMail()&&checkCode();
+		}
+		
+		/**********************************************************/
+		//封装校验
+		function checkField(id,reg){
+			//获取用户数据
+			var inp = document.getElementById(id);
+			var va = inp.value;
+			var alt = inp.alt;
+			//创建校验规则
+			//获取span对象
+			var span = document.getElementById(id+"Span");
+			//开始校验
+			if(va=="" || va==null){
+		   		span.innerHTML=alt+"不能为空";
+				span.style.color="red";
+				return false;
+		   	}else if(reg.test(va)){
+		 		span.innerHTML=alt+"OK";
+				span.style.color="green";
+				return true;
+		 	}else{
+				span.innerHTML=alt+"不符合规则";
+				span.style.color="red";
+				return false;
+			}
+		}
+		
+		function aaaa() {
+			var submitBtn = document.getElementById("sub");
+			  
+			 submitBtn.onclick = function (event) {
+			  alert("preventDefault!");
+			  return false;//此处return false;即不会提交表单，一般验证表单数据不符合要求使用
+			 };
+		}
+		
+		
+	</script>
+	
+</head>
+
+<body onLoad="createCode()">
+	
+	<div id="showdiv">
+		<img src="image/logo.png" alt="" width="500px;"><br>
+		<h3 align="center">注册</h3>
+		<form action="user/regUser" method="post" onsubmit="return checkSub()">
+			<table>
+				<tr>
+					<td>手&nbsp;机&nbsp;号：</td>
+					<td>
+						<input type="text" name="phone" id="phone" value="" alt="手机号" onblur="checkPhone()">
+						<span id="phoneSpan"></span>
+					</td>
+				</tr>
+				<tr>
+					<td>昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称：</td>
+					<td>
+						<input type="text" name="name" id="name" value="" alt="昵称" onBlur="checkName()">
+						<span id="nameSpan"></span>
+					</td>
+				</tr>
+				<tr>
+					<td>密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码：</td>
+					<td>
+						<input type="password" name="pwd" id="pwd" value="" alt="密码" onBlur="checkPwd();checkPwd2()">
+						<span id="pwdSpan">*密码6-8位</span>
+					</td>
+				</tr>
+				<tr>
+					<td>确认密码:</td>
+					<td>
+						<input type="password" name="pwd2" id="pwd2" value="" onblur="checkPwd2()"/>
+						<span id="pwd2Span"></span>
+					</td>
+				</tr>
+				<tr>
+					<td>邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱：</td>
+					<td>
+						<input type="email" name="mail" id="mail" value="" alt="邮箱" onblur="checkMail()"/>
+						<span id="mailSpan"></span>
+					</td>
+				</tr>
+				<tr>
+					<td>性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别：</td>
+					<td>
+						男<input type="radio" name="sex" id="sex1" value="1" checked="checked"/>
+						女<input type="radio" name="sex" id="sex0" value="0"/>
+					</td>
+				</tr>
+				<tr>
+					<td>验&nbsp;证&nbsp;码：</td>
+					<td>
+						<input type="text" name="code" id="code" value="" style="width: 100px;" onBlur="checkCode();">&nbsp;&nbsp;&nbsp;&nbsp;
+						<span id="codeSpan" onClick="createCode()" style="background-image: url(image/code.jpg.gif);color: black"></span>
+						<span id="codeSpan2"></span>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" align="center"><input type="checkbox" name="" id="agree" value="" onClick="checkAgree()">是否同意本公司协议</td>
+				</tr>
+				<tr>
+					<td colspan="2" align="center"><button type="submit" name="" id="sub" value="" disabled="disabled" >立即注册</button></td>
+				</tr>
+			</table>
+		</form>
+		<div align="right"><a href="login.html">已有账号</a></div>
+	</div>
+	
+</body>
+</html>

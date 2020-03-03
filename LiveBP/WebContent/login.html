@@ -1,0 +1,158 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Huang登录表单</title>
+	
+	<style type="text/css">
+		/*设置背景图片*/
+		body{
+			background-image: url(image/b2.jpg);
+		}
+		/*设置tr样式*/
+		tr{
+			height: 40px;
+		}
+		/*设置div样式*/
+		#showdiv{
+			border: solid 1px #FF0000;/*边框*/
+			border-radius: 10px;/*边框圆角*/
+			width: 500px;
+			margin: auto;/*外边框*/
+			margin-top: 40px;
+		}
+		/*设置table样式*/
+		table{
+			margin: auto;
+			color: white;
+		}
+		span{
+			font-size: 13px;
+		}
+		#codeSpan{
+			font-size: 20px;
+		}
+	</style>
+	
+	<link rel="stylesheet" href="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js">
+	
+	<script type="text/javascript">
+		
+		
+		function login(){
+			var userphone = document.getElementById("userphone").value;
+			var userpwd = document.getElementById("userpwd").value;
+			if(userphone!=null && userphone!="" && userpwd!=null && userpwd!=""){
+				
+				//可封装
+				var ajax;
+				if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+					ajax=new XMLHttpRequest();
+				}else{// code for IE6, IE5
+				  ajax=new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				
+				ajax.open("POST","user/login");
+				ajax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+				ajax.send("userphone="+userphone+"&userpwd="+userpwd);
+				
+				ajax.onreadystatechange=function(){
+					
+					if(ajax.readyState==4 && ajax.status==200){
+						// alert(ajax.responseText)
+						var json = JSON.parse(ajax.responseText);
+						if(json.message==false){
+							var showLogin = document.getElementById("showLogin");
+							showLogin.innerHTML="手机号或密码错误";
+						}else if(json.message==true){
+							alert("登录成功");
+							window.location.replace("/LiveBP/index.html?userPojo="+json.userPojo);
+						}
+						/*
+						if(ajax.responseText=="false"){
+							var showLogin = document.getElementById("showLogin");
+							showLogin.innerHTML="手机号或密码错误";
+						}else if(ajax.responseText=="true"){
+							window.location.replace("/LiveBP/index.html");
+						}else{
+							alert("哈哈");
+							alert(ajax.readyState+":"+ajax.status);	
+						}
+						*/
+						
+					}
+					
+				}
+				
+				
+				/*
+				$.ajax{
+					URL:"user/loginUser",
+					type:"post",
+					data:{
+						userphone:document.getElementById("userphone").value,
+						userpwd:document.getElementById("userpwd").value
+					},
+					dataType:"json",
+					contentType:"application/x-www-form-urlencoded",
+					Error:function(XMLHttpRequest, textStatus, errorThrown){
+						alert("出现错误");
+					},
+					success:function(data){
+						if(data.message==false){
+							var showLogin = document.getElementById("showLogin");
+							showLogin.innerHTML="手机号或密码错误";
+						}else if(data.message==true){
+							window.location.replace("/LiveBP/index.html");
+						}else{
+							alert("哈哈");
+						}
+					}
+				}
+				*/
+				
+				
+				
+				
+			}else{
+				var showLogin = document.getElementById("showLogin");
+				showLogin.innerHTML="手机号或密码不能为空";
+			}
+		}
+		
+	</script>
+	
+</head>
+
+<body onLoad="createCode()">
+	
+	<div id="showdiv">
+		<img src="image/logo.png" alt="" width="500px;"><br>
+		<h3 align="center">登录</h3>
+		<!--<form action="user/login" method="post" onSubmit="return login()">-->
+			<table>
+				<tr>
+					<td>手&nbsp;机&nbsp;号：</td>
+					<td>
+						<input type="text" name="phone" id="userphone" value="" alt="手机号" >
+						
+					</td>
+				</tr>
+				<tr>
+					<td>密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码：</td>
+					<td>
+						<input type="password" name="pwd" id="userpwd" value="" alt="密码" >
+						
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" align="center"><input type="button" name="" id="sub" value="登录" onClick="login()"></td>
+				</tr>
+			</table>
+			<div id="showLogin"></div>
+		<!--</form>-->
+		<div align="right"><a href="reg.html">没有账号</a></div>
+	</div>
+	
+</body>
+</html>

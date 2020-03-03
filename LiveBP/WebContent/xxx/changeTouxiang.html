@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="zh-CN" id="index">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="format-detection" content="telephone=no, email=no" />
+<meta name="keywords" content="">
+<meta name="description" content="">
+<title>图片裁剪</title>
+<style>
+body {
+	margin: 0;
+	text-align: center;
+}
+#clipArea {
+	margin: 20px;
+	height: 300px;
+}
+#file,
+#clipBtn {
+	margin: 20px;
+}
+#view {
+	margin: 0 auto;
+	width: 200px;
+	height: 200px;
+}
+</style>
+</head>
+<body ontouchstart="">
+<div id="clipArea"></div>
+<input type="file" id="file">
+<button id="clipBtn">截取</button>
+<div id="view"></div>
+<button onclick="changeTouxiang()">保存修改</button>
+
+
+<script src="http://www.jq22.com/jquery/2.1.1/jquery.min.js"></script>
+<script src="js/iscroll-zoom.js"></script>
+<script src="js/hammer.js"></script>
+<script src="js/lrz.all.bundle.js"></script>
+<script src="js/jquery.photoClip.js"></script>
+<script>
+
+var imgUrl = "";
+
+//document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+var clipArea = new bjj.PhotoClip("#clipArea", {
+	size: [260, 260],
+	outputSize: [640, 640],
+	file: "#file",
+	view: "#view",
+	ok: "#clipBtn",
+	loadStart: function() {
+		console.log("照片读取中");
+	},
+	loadComplete: function() {
+		console.log("照片读取完成");
+	},
+	clipFinish: function(dataURL) {
+		console.log(dataURL);
+		imgUrl = dataURL;
+		alert(imgUrl);
+		
+	}
+});
+//clipArea.destroy();
+
+function changeTouxiang(){
+	 //将base64转换为blob
+    dataURLtoBlob: function(dataurl) { 
+        var arr = dataurl.split(','),
+            mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]),
+            n = bstr.length,
+            u8arr = new Uint8Array(n);
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new Blob([u8arr], { type: mime });
+    },
+    //将blob转换为file
+    blobToFile: function(theBlob, fileName){
+       theBlob.lastModifiedDate = new Date();
+       theBlob.name = fileName;
+       return theBlob;
+    },
+    //调用
+    var blob = dataURLtoBlob(base64Data);
+    var file = blobToFile(blob, imgName);
+	
+    var params = new FormData();
+   	params.append('file',file);
+   	
+   	alert(params.get("file").name+"aaa");
+    
+   	
+  //进行Ajax请求
+     $.ajax({
+         //几个参数需要注意一下
+         type: "POST",//方法类型
+         dataType: "json",//预期服务器返回的数据类型,可以不设置
+         url: "user/uptouxaing" ,//url
+         data: params,
+         async: false,  
+         cache: false,
+         contentType: false, //禁止设置请求类型
+         processData: false, //禁止jquery对DAta数据的处理,默认会处理
+         success: function (data) {
+             //console.log(result);//打印服务端返回的数据(调试用)
+             //if (result.isSuccess) {
+            	 alert("成功");
+            	 alert(data);
+                 //跳转页面
+                 //window.location.href="user/personalDesk.action";
+             //}
+         },
+         error:function (XMLHttpRequest, textStatus, errorThrown) {
+             console.log('出错啦！')
+             console.log(XMLHttpRequest);
+             console.log(textStatus);
+             console.log(errorThrown);
+         }
+     });
+}
+
+</script>
+
+</body>
+</html>

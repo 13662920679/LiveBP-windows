@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	
+		<div class="row">			
+			<div class="col-lg-2 col-md-2"><span style="float: left;"><img class="logoH" src="image/logo.png" alt=""></span></div>
+
+			<div class="col-lg-4 col-md4">
+				<div style="margin: 20px;">
+					<button type="button" class="btn btn-default" onClick="javascript:location.href='index.html'">首页</button>
+					<button type="button" class="btn btn-default" onClick="javascript:location.href='roomList.html'">直播</button>
+					<div class="btn-group dropdown">
+						<button id="dropdownMenu1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">
+							分类
+							<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="#">绝地求生</a></li>
+							<li><a href="#">王者荣耀</a></li>
+							<li><a href="#">英雄联盟</a></li>
+							<li class="divider"></li>
+							<li><a href="#">颜值</a></li>
+							<li><a href="#">音乐</a></li>
+							<li><a href="#">吃播</a></li>
+						</ul>
+					</div>
+					<button type="button" class="btn btn-default">视频</button>
+					<button type="button" class="btn btn-default">鱼吧</button>
+				</div>
+			</div>
+
+			<div class="col-lg-3 col-md-3">
+
+				<div class="input-group" style="margin: 20px;">
+					<input type="text" class="form-control" id="sousuo">
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="button" onClick="sousuo()">
+							<span class="glyphicon glyphicon-search"></span>
+						</button>
+					</span>
+				</div>
+
+			</div>
+
+			<div class="col-lg-3 col-md-3">
+				<div style="margin: 10px;">
+					<span style="float: right">
+						<button type="button" class="btn btn-default" style="font-size: 10px;">
+							<span class="glyphicon glyphicon-eye-open" style="font-size: 15px"></span>
+							<br>
+							历史
+						</button>
+						<button type="button" class="btn btn-default"  style="font-size: 10px;">
+							<span class="glyphicon glyphicon-heart" style="font-size: 15px"></span>
+							<br>
+							关注
+						</button>
+						<button type="button" class="btn btn-default"  style="font-size: 10px;">
+							<span class="glyphicon glyphicon-facetime-video" style="font-size: 15px"></span>
+							<br>
+							开播
+						</button>
+						<button type="button" class="btn btn-default"  style="font-size: 10px;">
+							<span class="glyphicon glyphicon-envelope" style="font-size: 15px"></span>
+							<br>
+							消息
+						</button>
+						<a href="" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" onClick=""><img class="img-circle touxiang" id="touxiang" src="image/touxiang.png" alt=""/></a>
+						<ul class="dropdown-menu" contenteditable="true" role="menu" style="width: 100%">
+							昵称：<span id="usernameSpan"></span><br>
+							<input type="button" value="查看个人信息" onclick="userInfo()"><br>
+							<input type="button" value="退出登录" onclick="javascript:location.href='login.html'"><br>
+						</ul>
+					</span>
+				</div>
+			</div>
+		</div>
+	
+</body>
+</html>

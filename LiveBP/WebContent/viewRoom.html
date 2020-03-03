@@ -1,0 +1,393 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+	
+	<link href="http://cdn.bootcss.com/bootstrap/3.3.1/css/bootstrap-theme.min.css" rel="stylesheet">
+	
+	<link rel="stylesheet" href="css/video-js.min.css">
+	
+	<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+	
+	<link href="http://vjs.zencdn.net/5.5.3/video-js.css" rel="stylesheet">  
+  	  
+	
+	<script src="http://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="http://cdn.bootcss.com/bootstrap/3.3.1/js/npm.js"></script>
+	
+	<!-- If you'd like to support IE8 -->  
+  	<script src="http://vjs.zencdn.net/ie8/1.1.1/videojs-ie8.min.js"></script>  
+  	
+  	<script src="http://vjs.zencdn.net/5.5.3/video.js"></script>
+	
+	<style>
+		.logoH{
+			width: 150px;
+			height: 75px;
+		}
+		
+		.touxiang{
+			width: 40px;
+			height: 40px;
+		}
+
+
+		
+	</style>
+	
+	
+	
+	<style type="text/css">
+		canvas { border: 1px solid black; }
+		#change{width:200px; line-height:30px; color:#fff; text-align:center; background:blue;}
+	</style>
+	
+	<script type="text/javascript" charset="utf-8">
+		var text = "本直播间主要进行游戏直播，|喜欢的请点个关注。|直播平台禁止传播一切的不良|内容，如有发现将接受惩罚！";
+		var arr = text.split("|");
+		var line = 0;
+		var timer = 0;
+		var i = 0;
+		var newText = "";
+
+		function Typing(id) {
+			var canvas = document.getElementById(id);
+			if (canvas == null) {
+				return false;
+			}
+			scrollit();
+			
+		}
+
+		function scrollit() {
+			newText = arr[line].slice(0, i++) + "_";
+			var context = canvas.getContext("2d");
+			// 擦除文字
+			context.clearRect(0, 20 + line * 30, 600, 20 + 30 * (line + 1));
+			var gradient = context.createLinearGradient(0, 0, 200, 0);
+			gradient.addColorStop("0", "magenta");
+			gradient.addColorStop("0.5", "blue");
+			gradient.addColorStop("1.0", "red");
+			context.fillStyle = gradient;
+			context.font = "20px Verdana";
+			context.textBaseline = "hanging";
+
+			if (i > arr[line].length) {
+				newText = arr[line].slice(0, arr[line].length);
+				context.fillText(newText, 30, 20 + 30 * line);
+				// 换行
+				i = 0;
+				line++;
+				if (line < arr.length) {
+					clearTimeout(timer);
+					scrollit();
+				};
+			} else {
+				context.fillText(newText, 30, 20 + 30 * line);
+				timer = setTimeout(scrollit, 200);
+			}
+		}
+
+		window.onload = function() {
+			Typing("canvas");
+		}
+		
+		function sousuo(){
+			  var mainDiv = document.getElementById("mainDiv");
+			  mainDiv.style.display="none";
+			  var sousuoDiv = document.getElementById("sousuoDiv");
+			  sousuoDiv.style.display="";
+				//var showTable = showTable;
+				var sousuo = document.getElementById("sousuo").value;
+				var ajax;
+				if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+					ajax=new XMLHttpRequest();
+				}else{// code for IE6, IE5
+				  ajax=new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				ajax.open("GET","user/selectBySousuo?sousuo="+sousuo);
+				ajax.send();
+				ajax.onreadystatechange=function(){
+					//var showTable = showTable;
+					if(ajax.readyState==4 && ajax.status==200){
+						alert(ajax.responseText);
+						
+						/*
+						alert("iiii");
+						var str = ajax.responseText;
+						var eval = eval("("+str+")");
+						alert("jjjj");
+						for(var i in eval){
+							alert(eval[i].username+":"+eval[i].usersex);
+						}
+						*/
+						
+						
+						var jsons = JSON.parse(ajax.responseText);
+						var length = 0;
+						for(var j in jsons){
+							length++;
+						}
+						
+						//var showTable = document.getElementById("showTable");
+						alert(sousuoTbody.innerHTML);
+						
+						sousuoTbody.innerHTML="";
+						
+						if(length!=0){
+							for(var i=0;i<length;i++) {
+								alert(jsons[i].username+":"+jsons[i].usersex);
+								sousuoTbody.innerHTML=sousuoTbody.innerHTML+"<tr><th>"+jsons[i].username+"</th><th>"+jsons[i].usersex+"</th><th>"+jsons[i].userFollow+"</th><th>"+jsons[i].userFans+"</th><th><input type='button' style='color: #A71D2A;' name='"+jsons[i].userphone+"' value='"+jsons[i].ifFollow+"' onClick='follow(this.name,this.value)' /></th></tr>";
+							}
+						}else{
+							sousuoTbody.innerHTML=sousuoTbody.innerHTML+"<tr><th>没有此数据</th></tr>";
+						}
+						
+						
+					}else{
+						alert("失败");
+						alert(ajax.readyState+"+"+ajax.status);
+					}
+				}
+			}
+		
+		  function follow(userphone,ifFollow){
+			  alert("关注"+userphone+":"+ifFollow);
+				var followphone = userphone;
+				if(ifFollow=="已关注"){
+					var ajax;
+					if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+						ajax=new XMLHttpRequest();
+					}else{// code for IE6, IE5
+					  ajax=new ActiveXObject("Microsoft.XMLHTTP");
+					}
+					ajax.open("GET","user/delFolByUpAndFp?followphone="+followphone);
+					ajax.send();
+					ajax.onreadystatechange=function(){
+						if(ajax.readyState==4 && ajax.status==200){
+							sousuo();
+						}else{
+							alert("失败-取消关注");
+						}
+					}
+				}else if(ifFollow=="关注"){
+					var ajax;
+					if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+						ajax=new XMLHttpRequest();
+					}else{// code for IE6, IE5
+					  ajax=new ActiveXObject("Microsoft.XMLHTTP");
+					}
+					ajax.open("GET","user/addFolByUpAndFp?followphone="+followphone);
+					ajax.send();
+					ajax.onreadystatechange=function(){
+						if(ajax.readyState==4 && ajax.status==200){
+							sousuo();
+						}else{
+							alert("失败-关注");
+						}
+					}
+				}
+			}
+	</script>
+	
+</head>
+
+<body background="image/backgroud.jpg">
+	
+	<div class="container-fluid" style="width: 1480px" >
+	
+	<head>
+		<div class="row">
+					
+					<div class="col-lg-2 col-md-2"><span style="float: left;"><img class="logoH" src="image/logo.png" alt=""></span></div>
+
+					<div class="col-lg-4 col-md4">
+						<div style="margin: 20px;">
+							<button type="button" class="btn btn-default" onClick="javascript:location.href='index.html'">首页</button>
+							<button type="button" class="btn btn-default" onClick="javascript:location.href='roomList.html'">直播</button>
+							<div class="btn-group dropdown">
+								<button id="dropdownMenu1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">
+									分类
+									<span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu" role="menu">
+									<li><a href="#">绝地求生</a></li>
+									<li><a href="#">王者荣耀</a></li>
+									<li><a href="#">英雄联盟</a></li>
+									<li class="divider"></li>
+									<li><a href="#">颜值</a></li>
+									<li><a href="#">音乐</a></li>
+									<li><a href="#">吃播</a></li>
+								</ul>
+							</div>
+							<button type="button" class="btn btn-default">视频</button>
+							<button type="button" class="btn btn-default">鱼吧</button>
+						</div>
+					</div>
+
+					<div class="col-lg-3 col-md-3">
+
+							<div class="input-group" style="margin: 20px;">
+								<input type="text" class="form-control"  id="sousuo">
+								<span class="input-group-btn">
+									<button class="btn btn-default" type="button"  onClick="sousuo()">
+										<span class="glyphicon glyphicon-search"></span>
+									</button>
+								</span>
+							</div>
+
+					</div>
+
+					<div class="col-lg-3 col-md-3">
+						<div style="margin: 10px;">
+							<span style="float: right">
+								<button type="button" class="btn btn-default" style="font-size: 10px;">
+									<span class="glyphicon glyphicon-eye-open" style="font-size: 15px"></span>
+									<br>
+									历史
+								</button>
+								<button type="button" class="btn btn-default"  style="font-size: 10px;">
+									<span class="glyphicon glyphicon-heart" style="font-size: 15px"></span>
+									<br>
+									关注
+								</button>
+								<button type="button" class="btn btn-default"  style="font-size: 10px;">
+									<span class="glyphicon glyphicon-facetime-video" style="font-size: 15px"></span>
+									<br>
+									开播
+								</button>
+								<button type="button" class="btn btn-default"  style="font-size: 10px;">
+									<span class="glyphicon glyphicon-envelope" style="font-size: 15px"></span>
+									<br>
+									消息
+								</button>
+								<a href="" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" onClick=""><img class="img-circle touxiang" src="image/touxiang.png" alt=""/></a>
+								<ul class="dropdown-menu" contenteditable="true" role="menu" style="width: 100%">
+									昵称：HuangXiTao<br>
+									<input type="button" value="查看个人信息" onclick="javascript:location.href='userInfo.html'"><br>
+									
+									<input type="button" value="退出登录" onclick="javascript:location.href='login.html'"><br>
+								</ul>
+							</span>
+						</div>
+					</div>
+				</div>
+	</head>
+	
+	<div class="row" id="mainDiv">
+		<div class="col-lg-9">
+			<p id="enableFlash">
+				<embed src='dgPortal.swf' width='1000px' height='600px'></embed>
+			</p >
+			<!--<video src="video/game.mp4" autoplay="autoplay" controls="controls" style="width: 100%;height: 100%"></video>-->
+		</div>
+		
+		<div class="col-lg-3">
+			<div class="panel panel-primary">
+				<div class="panel-heading">直播间公告</div>
+				<div class="panel-body">
+					<canvas id="canvas" width="300" height="200"></canvas>
+				</div>
+			</div>
+			<div class="panel panel-primary">
+				<div class="panel-heading">主播信息</div>
+				<div class="panel-body">
+					昵称：HuangXiTao<br>
+					类型：绝地求生<br>
+				</div>
+			</div>
+			<div class="panel panel-primary">
+				<div class="panel-heading">弹幕</div>
+				<div class="panel-body">
+					
+					<div class="input-group" style="margin: 20px;">
+						<input type="text" class="form-control">
+						<span class="input-group-btn">
+							<button class="btn btn-default" type="button">
+								发送
+							</button>
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div id="sousuoDiv" style="display: none;">
+				<table id="sousuoTable"  style="color: #FFFFFF;align-content: center;">
+					<thead>
+						<tr>
+							<th width="150px;">昵称</th>
+							<th width="150px;">性别</th>
+							<th width="150px;">关注</th>
+							<th width="150px;">粉丝</th>
+							<th width="150px;">操作</th>
+						</tr>
+					</thead>
+					<tbody id="sousuoTbody">
+						
+					</tbody>
+				</table>
+			</div>
+			<script type="text/javascript">
+				var sousuoTbody = document.getElementById("sousuoTbody");
+			</script>
+	
+	</div>
+	
+	<script src="http://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+ 	<script type="text/javascript">
+ 	
+ 		$(function(){
+ 			var flag = false;
+ 			// 判断客户端是否启动flash，是则添加视频模块，否则添加启动flash模块
+			if(window.ActiveXObject){
+				try{
+					var swf = new ActiveXObject("ShockwaveFlash.ShockwaveFlash");
+				    if(swf){
+						flag = true;
+				    }
+			  }catch(e){
+				  
+			  }
+			}else{
+				try{
+					var swf = navigator.plugins['Shockwave Flash'];
+				  	if(swf){
+				    	flag = true;
+				  	}
+				}catch(e){
+				  	
+			  	}
+			}
+			
+			if(flag){
+				console.log("running ok");
+				$("#enableFlash").html("<video id='my-video' class='video-js'></video>");
+				
+				var str = "huang";
+				
+				var player = videojs('my-video',{
+				    width: '1000px',
+				    height: '600px',
+				    controls: true,
+				    'autoplay': true,
+				    sources: [{
+				        src: 'rtmp://58.200.131.2:1935/livetv/hunantv',
+				        //+ str,
+				        type: 'rtmp/flv'
+				    }]
+			 	},function(){
+			 		console.log(this);
+			 	});
+				
+			}else{
+				console.log("running error");
+			}
+ 		});
+ 	
+ 	</script>
+</body>
+</html>

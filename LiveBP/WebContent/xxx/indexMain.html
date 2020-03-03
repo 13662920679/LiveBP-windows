@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+	<link href="http://cdn.bootcss.com/bootstrap/3.3.1/css/bootstrap-theme.min.css" rel="stylesheet">
+	<link href="http://cdn.bootcss.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="css/video-js.min.css">
+	
+	<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+	<script src="http://cdn.bootcss.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+	<script src="http://cdn.bootcss.com/bootstrap/3.3.1/js/npm.js"></script>
+	<script src="js/video.min.js"></script>
+	<script src="https://cdn.bootcss.com/jquery-cookie/1.4.0/jquery.cookie.js"></script>
+	<script src="https://cdn.bootcss.com/jquery-cookie/1.4.0/jquery.cookie.min.js"></script>
+	
+	<!-- 下拉菜单更改为悬停(hover)触发 -->
+	<script src="http://cdn.bootcss.com/bootstrap-hover-dropdown/2.0.10/bootstrap-hover-dropdown.min.js"></script>
+	
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<style type="text/css">
+		.logoH{
+			width: 150px;
+			height: 75px;
+		}
+		
+		.touxiang{
+			width: 40px;
+			height: 40px;
+		}
+		
+		.carousel-inner{
+			width:100%;
+			height: 100%;
+		}
+	</style>
+	
+	<script type="text/javascript">		
+
+		window.onload=function(){
+			username();
+			  userTouxiang();
+			$("#main").load("main.html");
+		}
+		
+		function userInfo(){
+			$("#main").load("userInfo.html");
+			 alert("userInfo run");
+			  username();
+			  touxiang();
+			  username2();
+			  usersex();
+			  usertext();
+			  follows();
+			  fans();
+			  useremail();
+		}
+		
+		function username(){
+			//alert("aaaa");
+			
+			var ajax;
+			if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+				ajax=new XMLHttpRequest();
+			}else{// code for IE6, IE5
+			  ajax=new ActiveXObject("Microsoft.XMLHTTP");
+			}
+			
+			ajax.open("POST","user/getUserSession");
+			ajax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
+			ajax.send(null);
+			
+			ajax.onreadystatechange=function(){
+				
+				if(ajax.readyState==4 && ajax.status==200){
+					var json = JSON.parse(ajax.responseText);
+					var username = json.username;
+					//alert(username);
+					var span = document.getElementById("usernameSpan");
+					span.innerHTML=username;
+				}else{
+					/*alert("失败")
+					alert(ajax.readyState+":"+ajax.status);*/
+				}
+				
+			}
+			
+			//alert("哈哈哈");
+		}
+		
+		function userTouxiang(){
+			 var ajax;
+ 			if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+ 				ajax=new XMLHttpRequest();
+ 			}else{// code for IE6, IE5
+ 			  ajax=new ActiveXObject("Microsoft.XMLHTTP");
+ 			}
+ 			
+ 			ajax.open("get","user/showTouxiang");
+ 			ajax.responseType = "blob"; // 表示接收文件流数据
+ 			ajax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
+ 			ajax.send(null);
+ 			
+ 			ajax.onreadystatechange=function(){
+ 				if(ajax.readyState==4 && ajax.status==200){
+ 					
+ 					var blob = this.response;
+ 			        //将Blob 对象转换成 base64 字符串
+ 			        var reader = new FileReader();
+ 			        reader.readAsDataURL(blob);
+ 			        reader.onload = function(e) {
+				             
+				             document.getElementById('touxiang').src=e.target.result;
+				         }
+ 					//var b = ajax.responseBody;
+ 					//document.getElementById('upload').src=ajax.responseBody;
+ 					//var json = JSON.parse(ajax.responseText);
+ 					//var username = ajax.responseText;
+ 					//$("#username").html(username);
+ 				}else{
+ 					//alert("失败");
+ 					//alert(ajax.readyState+":"+ajax.status);
+ 				}
+ 			}
+		    	
+		}
+		
+		/*
+			鼠标移入移出
+			
+		  $(document).ready(function(){
+			$("#dropdownMenu1").mouseover(function(){
+			   $("#dropdownMenu1").click();
+			});
+			$("#dropdownMenu1").mouseout(function(){
+				$(this).click();    
+			});
+		  })*/
+		
+		 
+		
+		  function follow(userphone,ifFollow){
+			  alert("关注"+userphone+":"+ifFollow);
+				var followphone = userphone;
+				if(ifFollow=="已关注"){
+					var ajax;
+					if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+						ajax=new XMLHttpRequest();
+					}else{// code for IE6, IE5
+					  ajax=new ActiveXObject("Microsoft.XMLHTTP");
+					}
+					ajax.open("GET","user/delFolByUpAndFp?followphone="+followphone);
+					ajax.send();
+					ajax.onreadystatechange=function(){
+						if(ajax.readyState==4 && ajax.status==200){
+							sousuo();
+						}else{
+							alert("失败-取消关注");
+						}
+					}
+				}else if(ifFollow=="关注"){
+					var ajax;
+					if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+						ajax=new XMLHttpRequest();
+					}else{// code for IE6, IE5
+					  ajax=new ActiveXObject("Microsoft.XMLHTTP");
+					}
+					ajax.open("GET","user/addFolByUpAndFp?followphone="+followphone);
+					ajax.send();
+					ajax.onreadystatechange=function(){
+						if(ajax.readyState==4 && ajax.status==200){
+							sousuo();
+						}else{
+							alert("失败-关注");
+						}
+					}
+				}
+			}
+		  
+		
+		
+		//搜索函数
+		function sousuo(){
+			/*
+			$.cookie("sousuoData",sousuoData);
+			$("#main").load("sousuoList.html");
+			*/
+			
+			  var mainDiv = document.getElementById("main");
+			  mainDiv.style.display="none";
+			  var sousuoDiv = document.getElementById("sousuoDiv");
+			  sousuoDiv.style.display="";
+				//var showTable = showTable;
+				var sousuo = document.getElementById("sousuo").value;
+				var ajax;
+				if(window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
+					ajax=new XMLHttpRequest();
+				}else{// code for IE6, IE5
+				  ajax=new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				ajax.open("GET","user/selectBySousuo?sousuo="+sousuo);
+				ajax.send();
+				ajax.onreadystatechange=function(){
+					if(ajax.readyState==4 && ajax.status==200){
+						alert(ajax.responseText);
+						alert("卡住1");
+						var jsons = JSON.parse(ajax.responseText);
+						alert("卡住2");
+						var length = 0;
+						for(var j in jsons){
+							length++;
+						}
+						alert("卡住3.5");
+						var sousuoTbody = document.getElementById("sousuoTbody");
+						//alert(sousuoTbody.innerHTML);
+						alert("卡住3");
+						sousuoTbody.innerHTML="";
+						alert("卡住4");
+						if(length!=0){
+							for(var i=0;i<length;i++) {
+								alert(jsons[i].username+":"+jsons[i].usersex);
+								sousuoTbody.innerHTML=sousuoTbody.innerHTML+"<tr><th>"+jsons[i].username+"</th><th>"+jsons[i].usersex+"</th><th>"+jsons[i].userFollow+"</th><th>"+jsons[i].userFans+"</th><th><input type='button' style='color: #A71D2A;' name='"+jsons[i].userphone+"' value='"+jsons[i].ifFollow+"' onClick='follow(this.name,this.value)' /></th></tr>";
+								//alert(document.getElementById('sousuoTbody').innerHTML);
+							}
+						}else{
+							sousuoTbody.innerHTML=sousuoTbody.innerHTML+"<tr><th>没有此数据</th></tr>";
+						}
+					}else{
+						alert("失败");
+						alert(ajax.readyState+"+"+ajax.status);
+					}
+				}
+				
+			}
+	</script>
+	
+</head>
+<body background="image/backgroud.jpg">
+
+	<div id="head" class="container-fluid" style="width: 85%">
+		<div class="row">			
+			<div class="col-lg-2 col-md-2"><span style="float: left;"><img class="logoH" src="image/logo.png" alt=""></span></div>
+
+			<div class="col-lg-4 col-md4">
+				<div style="margin: 20px;">
+					<button type="button" class="btn btn-default" onClick="javascript:location.href='index.html'">首页</button>
+					<button type="button" class="btn btn-default" onClick="javascript:location.href='roomList.html'">直播</button>
+					<div class="btn-group dropdown">
+						<button id="dropdownMenu1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">
+							分类
+							<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="#">绝地求生</a></li>
+							<li><a href="#">王者荣耀</a></li>
+							<li><a href="#">英雄联盟</a></li>
+							<li class="divider"></li>
+							<li><a href="#">颜值</a></li>
+							<li><a href="#">音乐</a></li>
+							<li><a href="#">吃播</a></li>
+						</ul>
+					</div>
+					<button type="button" class="btn btn-default">视频</button>
+					<button type="button" class="btn btn-default">鱼吧</button>
+				</div>
+			</div>
+
+			<div class="col-lg-3 col-md-3">
+
+				<div class="input-group" style="margin: 20px;">
+					<input type="text" class="form-control" id="sousuo">
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="button" onClick="sousuo()">
+							<span class="glyphicon glyphicon-search"></span>
+						</button>
+					</span>
+				</div>
+
+			</div>
+
+			<div class="col-lg-3 col-md-3">
+				<div style="margin: 10px;">
+					<span style="float: right">
+						<button type="button" class="btn btn-default" style="font-size: 10px;">
+							<span class="glyphicon glyphicon-eye-open" style="font-size: 15px"></span>
+							<br>
+							历史
+						</button>
+						<button type="button" class="btn btn-default"  style="font-size: 10px;">
+							<span class="glyphicon glyphicon-heart" style="font-size: 15px"></span>
+							<br>
+							关注
+						</button>
+						<button type="button" class="btn btn-default"  style="font-size: 10px;">
+							<span class="glyphicon glyphicon-facetime-video" style="font-size: 15px"></span>
+							<br>
+							开播
+						</button>
+						<button type="button" class="btn btn-default"  style="font-size: 10px;">
+							<span class="glyphicon glyphicon-envelope" style="font-size: 15px"></span>
+							<br>
+							消息
+						</button>
+						<a href="" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" onClick=""><img class="img-circle touxiang" id="touxiang" src="image/touxiang.png" alt=""/></a>
+						<ul class="dropdown-menu" contenteditable="true" role="menu" style="width: 100%">
+							昵称：<span id="usernameSpan"></span><br>
+							<input type="button" value="查看个人信息" onclick="userInfo()"><br>
+							<input type="button" value="退出登录" onclick="javascript:location.href='login.html'"><br>
+						</ul>
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div id="main" class="container-fluid" style="width: 85%;display: ;">
+		
+	</div>
+	
+	<div id="sousuoDiv" class="container-fluid" style="width: 85%;display: none;">
+		<table id="sousuoTable"  style="color: #FFFFFF;align-content: center;">
+			<thead>
+				<tr>
+					<th width="150px;">昵称</th>
+					<th width="150px;">性别</th>
+					<th width="150px;">关注</th>
+					<th width="150px;">粉丝</th>
+					<th width="150px;">操作</th>
+				</tr>
+			</thead>
+			<tbody id="sousuoTbody">
+				
+			</tbody>
+		</table>
+	</div>
+	
+</body>
+</html>

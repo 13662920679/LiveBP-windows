@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html>
+  	<head>
+  	<title>视频直播</title>
+  	<meta charset="utf-8"></meta>
+
+  	<link href="http://vjs.zencdn.net/5.5.3/video-js.css" rel="stylesheet">  
+  	<!-- If you'd like to support IE8 -->  
+  	<script src="http://vjs.zencdn.net/ie8/1.1.1/videojs-ie8.min.js"></script>  
+  	
+  	<script src="http://vjs.zencdn.net/5.5.3/video.js"></script>  
+
+  	<!-- <script type="text/javascript" th:inline="javascript">
+		videojs.options.flash.swf = [[@{/}]] + 'static/videojs5.18.4/video-js.swf';
+  	</script>
+ -->
+</head>
+<body>
+  	<h1>直播测试!</h1>
+  	
+  	<p id="enableFlash">
+  		<embed src='dgPortal.swf' width='640px' height='439px'></embed>
+  	</p >
+ 	
+ 	<script src="http://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+ 	<script type="text/javascript">
+ 	
+ 		$(function(){
+ 			var flag = false;
+ 			// 判断客户端是否启动flash，是则添加视频模块，否则添加启动flash模块
+			if(window.ActiveXObject){
+				try{
+					var swf = new ActiveXObject("ShockwaveFlash.ShockwaveFlash");
+				    if(swf){
+						flag = true;
+				    }
+			  }catch(e){
+				  
+			  }
+			}else{
+				try{
+					var swf = navigator.plugins['Shockwave Flash'];
+				  	if(swf){
+				    	flag = true;
+				  	}
+				}catch(e){
+				  	
+			  	}
+			}
+			
+			if(flag){
+				console.log("running ok");
+				$("#enableFlash").html("<video id='my-video' class='video-js'></video>");
+				
+				var str = "huang";
+				
+				var player = videojs('my-video',{
+				    width: '640px',
+				    height: '439px',
+				    controls: true,
+				    'autoplay': true,
+				    sources: [{
+				        src: 'rtmp://127.0.0.1/live/' + str,
+				        type: 'rtmp/flv'
+				    }]
+			 	},function(){
+			 		console.log(this);
+			 	});
+				
+			}else{
+				console.log("running error");
+			}
+ 		});
+ 	
+ 	</script>
+</body>
+
+</html>
